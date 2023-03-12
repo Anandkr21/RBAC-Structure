@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const fs = require("fs")
 const { blacklist } = require('../config/blackllist')
 const { User } = require('../model/user.model');
 const { authMiddleware } = require('../middlewares/authentication');
@@ -129,8 +130,10 @@ userRouter.get('/stats', authMiddleware, authorise(["admin"]), (req, res) => {
 
 
 userRouter.get('/logout', (req, res) => {
-    const token = req.headers?.authorization?.split(" ")[1]
-    blacklist.push(token)
+    const token = req.headers.authorization?.split(" ")[1]
+    const blacklist_data = JSON.parse(fs.readFileSync('./blacklilst.json', "utf-8"))
+    blacklist_data.push(token)
+    fs.writeFileSync('./blacklist.json', JSON.stringify(blacklist_data))
     res.send("Logout Successfull")
 })
 
