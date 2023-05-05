@@ -18,6 +18,7 @@ app.use('/user', userRouter)
 app.listen(process.env.port, async () => {
   try {
     await connection
+    
     console.log('conndected to DB')
   } catch (err) {
     console.log('error to connecting DB')
